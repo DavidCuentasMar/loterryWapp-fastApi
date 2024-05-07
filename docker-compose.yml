@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+
+  mongodb:
+    image: mongo:latest # use the latest image.
+    container_name: mongodb
+    restart: unless-stopped
+    environment: # set required env variables to access mongo
+      MONGO_INITDB_ROOT_USERNAME:
+      MONGO_INITDB_ROOT_PASSWORD:
+    ports:
+      - 27017:27017
+    volumes: # optional to preserve database after container is deleted.
+      - ./database-data:/data/db
+
+  lottery-wapp:
+    container_name: lottery-wapp
+    build: .
+    command: sh -c "uvicorn app.main:app --reload --port=8000 --host=0.0.0.0"
+    depends_on:
+      - mongodb
+    ports:
+      - 8000:8000
+    restart: always
+
