@@ -1,1 +1,5 @@
 database-data/
+*.env
+*.env.*
+env.*
+env/
