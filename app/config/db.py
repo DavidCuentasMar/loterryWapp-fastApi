@@ -1,3 +1,5 @@
+import os
 from pymongo import MongoClient
-uri = ''
-conn = MongoClient(uri)
+
+mongo_uri = os.getenv("MONGO_URI", None)
+conn = MongoClient(mongo_uri)

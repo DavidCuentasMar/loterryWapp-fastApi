@@ -6,3 +6,4 @@ __pycache__/
 env.*
 
 *lotteryWapp.drawio
+database-data/

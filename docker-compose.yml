@@ -20,6 +20,8 @@ services:
     command: sh -c "uvicorn app.main:app --reload --port=8000 --host=0.0.0.0"
     depends_on:
       - mongodb
+    env_file: # set required env variables to access mongo
+    - .env 
     ports:
       - 8000:8000
     restart: always
