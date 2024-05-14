@@ -13,6 +13,10 @@ async def find_all_lotteries():
 
 @lottery_routes.post('/lottery/')
 async def create_lottery(lottery: Lottery):
+    if(lottery.number is None):
+        lottery.number = -1
+    if(lottery.completed is None):
+        lottery.completed = False
     conn.local.lottery.insert_one(dict(lottery))
     return serializeList(conn.local.lottery.find())
 

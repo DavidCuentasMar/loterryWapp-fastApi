@@ -2,7 +2,9 @@
 def lotteryEntity(item) -> dict:
     return {
         "id":str(item["_id"]),
-        "name":item["name"]
+        "name":item["name"],
+        "number":item["number"],
+        "completed":item["completed"]
     }
 
 def lotteryEntity(entity) -> list:
