@@ -5,3 +5,4 @@ class Lottery(BaseModel):
     name: str
     number: Optional[int] = Field(None)
     completed: Optional[bool] = Field(None)
+    create_datetime: Optional[str] = Field(None)

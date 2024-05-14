@@ -6,6 +6,8 @@ from ..models.user_lottery_junction import userLotteryJunction
 
 import json
 import random
+from datetime import datetime
+
 
 user_list = []
 lottery_list = []
@@ -25,15 +27,19 @@ for x in range(10):
     user_list.append(conn.local.user.insert_one(dict(json_object)))
 
 for x in range(3):
-    lottery_name = 'lottery #' + str(x)
-    json_str = '{"name":"'+lottery_name+'","number":"'+str(-1)+'","completed":"'+str(False)+'"}'
-    json_object = json.loads(json_str)
-    lottery_list.append(conn.local.lottery.insert_one(dict(json_object)))
+    data = {}
+    data['name'] = 'lottery #' + str(x)
+    data['number'] = -1
+    data['completed'] = False
+    data['created_datetime'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    lottery_list.append(conn.local.lottery.insert_one(data))
 
 for x in range(10):
     user_id = user_list[x].inserted_id
     lottery_id = lottery_list[random.randint(0, len(lottery_list)-1)].inserted_id
     number = random.randint(0, 34563)
-    json_str = '{"userId":"'+str(user_id)+'","lotteryId":"'+str(lottery_id)+'","number":'+str(number)+'}'
-    json_object = json.loads(json_str)
-    conn.local.userLotteryJunction.insert_one(dict(json_object))    
+    data = {}
+    data['userId'] = str(user_id)
+    data['lotteryId'] = str(lottery_id)
+    data['number'] = number
+    conn.local.userLotteryJunction.insert_one(data)    

@@ -5,6 +5,7 @@ from ..models.user_lottery_junction import userLotteryJunction
 from ..schemas.lottery import serializeDict, serializeList
 from ..schemas.user_lottery_junction import serializeDict, serializeList
 from bson import ObjectId
+from datetime import datetime
 lottery_routes = APIRouter()
 
 @lottery_routes.get('/lottery/all')
@@ -17,6 +18,7 @@ async def create_lottery(lottery: Lottery):
         lottery.number = -1
     if(lottery.completed is None):
         lottery.completed = False
+    lottery.create_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     conn.local.lottery.insert_one(dict(lottery))
     return serializeList(conn.local.lottery.find())
 
