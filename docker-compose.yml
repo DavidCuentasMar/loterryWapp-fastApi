@@ -7,8 +7,9 @@ services:
     container_name: mongodb
     restart: unless-stopped
     environment: # set required env variables to access mongo
-      MONGO_INITDB_ROOT_USERNAME:
-      MONGO_INITDB_ROOT_PASSWORD:
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     ports:
       - 27017:27017
     volumes: # optional to preserve database after container is deleted.
@@ -25,4 +26,3 @@ services:
     ports:
       - 8000:8000
     restart: always
-

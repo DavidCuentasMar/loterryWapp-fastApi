@@ -18,6 +18,8 @@ async def create_lottery(lottery: Lottery):
         lottery.number = -1
     if(lottery.completed is None):
         lottery.completed = False
+    lottery.number = None
+    lottery.winner = None
     lottery.create_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     conn.local.lottery.insert_one(dict(lottery))
     return serializeList(conn.local.lottery.find())
