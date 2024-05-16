@@ -3,10 +3,11 @@ from ..config.db import conn
 from ..models.user import User
 from ..models.lottery import Lottery
 from ..models.user_lottery_junction import userLotteryJunction
+from datetime import datetime
 
 import json
 import random
-from datetime import datetime
+import os
 
 
 user_list = []
@@ -37,7 +38,7 @@ for x in range(3):
 for x in range(10):
     user_id = user_list[x].inserted_id
     lottery_id = lottery_list[random.randint(0, len(lottery_list)-1)].inserted_id
-    number = random.randint(0, 34563)
+    number = random.randint(0, os.getenv("LIMIT_RANDOM_NUMBER", -1))
     data = {}
     data['userId'] = str(user_id)
     data['lotteryId'] = str(lottery_id)
