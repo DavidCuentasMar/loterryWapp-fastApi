@@ -14,14 +14,13 @@ async def find_all_lotteries():
 
 @lottery_routes.post('/lottery/')
 async def create_lottery(lottery: Lottery):
-    if(lottery.number is None):
-        lottery.number = -1
-    if(lottery.completed is None):
-        lottery.completed = False
-    lottery.number = None
-    lottery.winner = None
+    new_lottery = dict(lottery)
+    del new_lottery['id']
+    new_lottery['number'] = -1
+    new_lottery['completed'] = False
+    new_lottery['winner'] = None
     lottery.create_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    conn.local.lottery.insert_one(dict(lottery))
+    conn.local.lottery.insert_one(new_lottery)
     return serializeList(conn.local.lottery.find())
 
 @lottery_routes.get('/lottery/{id}')
@@ -33,14 +32,16 @@ async def get_lottery(id,lottery: Lottery):
 async def create_lottery_participation(user_lottery_junction_obj: userLotteryJunction):
     #Validate existance of lottery and user
     #TO-DO: bson.errors.InvalidId: '6636550633f20fc6bd39455' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string
-    lottery_obj = conn.local.lottery.find_one({"_id":ObjectId(user_lottery_junction_obj.lotteryId)})
-    user_obj = conn.local.user.find_one({"_id":ObjectId(user_lottery_junction_obj.userId)})
+    new_junction_obj = dict(user_lottery_junction_obj)
+    del new_junction_obj['id']
+    lottery_obj = conn.local.lottery.find_one({"_id":ObjectId(new_junction_obj.lotteryId)})
+    user_obj = conn.local.user.find_one({"_id":ObjectId(new_junction_obj.userId)})
     if lottery_obj is None:
         return {'message':'lottery not found'}
     if user_obj is None:
         return {'message':'user not found'}        
-    user_lottery_junction_obj = conn.local.userLotteryJunction.insert_one(dict(user_lottery_junction_obj))
-    return serializeDict(conn.local.userLotteryJunction.find_one({"_id":ObjectId(user_lottery_junction_obj.inserted_id)}))
+    obj_id = conn.local.userLotteryJunction.insert_one(new_junction_obj).inserted_id
+    return serializeDict(conn.local.userLotteryJunction.find_one({"_id":ObjectId(obj_id)}))
 
 @lottery_routes.get('/lottery/{id}/participation/all')
 async def get_lottery_participation(id):

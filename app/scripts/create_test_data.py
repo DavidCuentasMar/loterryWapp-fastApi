@@ -38,7 +38,7 @@ for x in range(3):
 for x in range(10):
     user_id = user_list[x].inserted_id
     lottery_id = lottery_list[random.randint(0, len(lottery_list)-1)].inserted_id
-    number = random.randint(0, os.getenv("LIMIT_RANDOM_NUMBER", -1))
+    number = random.randint(0, int(os.getenv("LIMIT_RANDOM_NUMBER", -1)))
     data = {}
     data['userId'] = str(user_id)
     data['lotteryId'] = str(lottery_id)

@@ -10,6 +10,8 @@ async def find_all_users():
 
 @user_routes.post('/user/')
 async def create_user(user: User):
-    conn.local.user.insert_one(dict(user))
+    new_user = dict(user)
+    del new_user["id"]
+    conn.local.user.insert_one(new_user).inserted_id
     return serializeList(conn.local.user.find())
  

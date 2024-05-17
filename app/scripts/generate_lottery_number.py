@@ -8,7 +8,7 @@ import os
 def generate_lottery_number():
     lotteryList = serializeList(conn.local.lottery.find({"number":-1, "completed": False}).sort({"create_datetime": -1}).limit(1))
     if(len(lotteryList)>0):
-        lottery_number = random.randint(0, os.getenv("LIMIT_RANDOM_NUMBER", -1))
+        lottery_number = random.randint(0, int(os.getenv("LIMIT_RANDOM_NUMBER", -1)))
         lottery = lotteryList[0]
         data = {}
         data['completed'] = True
